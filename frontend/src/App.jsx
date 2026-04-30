@@ -4,6 +4,7 @@ import Navbar from './components/Navbar'
 import Home from './pages/Home'
 import Menu from './pages/Menu'
 import Tables from './pages/Tables'
+import Rooms from './pages/Rooms'
 import Login from './pages/Login'
 import ManagerDashboard from './pages/dashboards/ManagerDashboard'
 import CashierDashboard from './pages/dashboards/CashierDashboard'
@@ -31,6 +32,7 @@ function App() {
                   <Route path="/" element={<Home />} />
                   <Route path="/menu" element={<Menu />} />
                   <Route path="/tables" element={<Tables />} />
+                  <Route path="/rooms" element={<Rooms />} />
                 </Routes>
               </>
             } />

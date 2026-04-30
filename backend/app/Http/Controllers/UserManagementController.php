@@ -12,7 +12,7 @@ class UserManagementController extends Controller
     // Manager only - Get all staff
     public function index()
     {
-        $users = User::whereIn('role', ['cashier', 'chef', 'waiter'])->get();
+        $users = User::all(); // Get all users including manager
         return response()->json($users);
     }
 

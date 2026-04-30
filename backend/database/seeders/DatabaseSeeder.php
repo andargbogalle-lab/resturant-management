@@ -16,6 +16,14 @@ class DatabaseSeeder extends Seeder
     {
         // Create Users with different roles
         User::create([
+            'name' => 'Manager',
+            'email' => 'manager',
+            'password' => Hash::make('1234'),
+            'role' => 'manager',
+            'phone' => '1234567890',
+        ]);
+
+        User::create([
             'name' => 'Cashier',
             'email' => 'cashier',
             'password' => Hash::make('1234'),

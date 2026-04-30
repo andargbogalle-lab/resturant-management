@@ -32,7 +32,8 @@ function ChefDashboard() {
   const fetchOrders = async () => {
     try {
       const response = await api.get('/orders')
-      const kitchenOrders = response.data.filter(o => ['pending', 'preparing', 'ready'].includes(o.status))
+      // Chef only sees confirmed, preparing, and ready orders (not pending)
+      const kitchenOrders = response.data.filter(o => ['confirmed', 'preparing', 'ready'].includes(o.status))
       setOrders(kitchenOrders.sort((a, b) => new Date(a.created_at) - new Date(b.created_at)))
     } catch (error) {
       console.error('Error fetching orders:', error)
@@ -87,8 +88,8 @@ function ChefDashboard() {
 
       <div className="stats-grid">
         <div className="stat-card">
-          <h3>{t('pendingOrders')}</h3>
-          <p className="stat-number">{orders.filter(o => o.status === 'pending').length}</p>
+          <h3>New Orders</h3>
+          <p className="stat-number">{orders.filter(o => o.status === 'confirmed').length}</p>
         </div>
         <div className="stat-card">
           <h3>{t('preparing')}</h3>
@@ -128,10 +129,10 @@ function ChefDashboard() {
 
                   <div className="order-items-list">
                     <h4>Items:</h4>
-                    {order.items && order.items.map(item => (
+                    {(order.order_items || []).map(item => (
                       <div key={item.id} className="kitchen-item">
                         <div className="item-details">
-                          <strong>{item.quantity}x {item.menu_item?.name}</strong>
+                          <strong>{item.quantity}x {item.menu_item?.name || 'Unknown Item'}</strong>
                           {item.notes && <p className="item-notes">📝 {item.notes}</p>}
                         </div>
                         <span className={`item-status ${item.status || 'pending'}`}>
@@ -142,7 +143,7 @@ function ChefDashboard() {
                   </div>
 
                   <div className="order-actions">
-                    {order.status === 'pending' && (
+                    {order.status === 'confirmed' && (
                       <button 
                         onClick={() => handleUpdateOrderStatus(order.id, 'preparing')} 
                         className="action-btn primary"
@@ -161,9 +162,16 @@ function ChefDashboard() {
                     )}
                     
                     {order.status === 'ready' && (
-                      <div className="ready-indicator">
-                        🔔 Ready for pickup by waiter
-                      </div>
+                      <button 
+                        onClick={() => {
+                          alert('🔔 WAITER CALLED!\n\nOrder #' + order.id + ' is ready for Table ' + order.table?.table_number)
+                          // You can add sound notification or real-time notification system here
+                        }} 
+                        className="action-btn warning"
+                        style={{ backgroundColor: '#ff9800', color: 'white' }}
+                      >
+                        📢 Call Waiter
+                      </button>
                     )}
                     
                     <button 

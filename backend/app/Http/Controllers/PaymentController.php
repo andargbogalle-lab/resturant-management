@@ -20,9 +20,9 @@ class PaymentController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'order_id' => 'required|exists:orders,id',
-            'amount' => 'required|numeric|min:0',
-            'discount' => 'nullable|numeric|min:0',
-            'payment_method' => 'required|in:cash,card,mobile,chapa',
+            'amount_paid' => 'required|numeric|min:0',
+            'payment_method' => 'required|in:cash,card,mobile',
+            'transaction_id' => 'nullable|string',
         ]);
 
         if ($validator->fails()) {
@@ -31,31 +31,24 @@ class PaymentController extends Controller
 
         $order = Order::findOrFail($request->order_id);
         
-        // Get settings
-        $taxRate = Setting::get('tax_rate', 0) / 100;
-        $serviceChargeRate = Setting::get('service_charge', 0) / 100;
-
-        $amount = $request->amount;
-        $discount = $request->discount ?? 0;
-        $subtotal = $amount - $discount;
-        $tax = $subtotal * $taxRate;
-        $serviceCharge = $subtotal * $serviceChargeRate;
-        $total = $subtotal + $tax + $serviceCharge;
+        // Simple payment - amount paid should match order total
+        $amountPaid = $request->amount_paid;
+        $orderTotal = $order->total_amount;
 
         $payment = Payment::create([
             'order_id' => $request->order_id,
             'cashier_id' => auth()->id(),
-            'amount' => $amount,
-            'discount' => $discount,
-            'tax' => $tax,
-            'service_charge' => $serviceCharge,
-            'total' => $total,
+            'amount' => $orderTotal,
+            'discount' => 0,
+            'tax' => 0,
+            'service_charge' => 0,
+            'total' => $orderTotal,
             'payment_method' => $request->payment_method,
             'status' => 'completed',
         ]);
 
-        // Update order status
-        $order->update(['status' => 'completed', 'completed_at' => now()]);
+        // Don't update order status here - let the frontend handle it
+        // This allows for prepayment (pending->confirmed) or post-payment (served->completed)
 
         return response()->json($payment->load(['order', 'cashier']), 201);
     }

@@ -3,34 +3,20 @@ import { useNavigate } from 'react-router-dom'
 import { useLanguage } from '../../context/LanguageContext'
 import api from '../../services/api'
 import './Dashboard.css'
-import './ManagerDashboard.css'
 
 function ManagerDashboard() {
   const [user, setUser] = useState(null)
-  const [stats, setStats] = useState({ orders: 0, tables: 0, menuItems: 0 })
-  const [activeTab, setActiveTab] = useState('overview')
+  const [orders, setOrders] = useState([])
+  const [payments, setPayments] = useState([])
   const [users, setUsers] = useState([])
   const [menuItems, setMenuItems] = useState([])
-  const [categories, setCategories] = useState([])
-  const [inventory, setInventory] = useState([])
-  const [showUserForm, setShowUserForm] = useState(false)
-  const [showMenuForm, setShowMenuForm] = useState(false)
-  const [showInventoryForm, setShowInventoryForm] = useState(false)
-  const [editingItem, setEditingItem] = useState(null)
+  const [tables, setTables] = useState([])
+  const [rooms, setRooms] = useState([])
+  const [bookings, setBookings] = useState([])
+  const [activeTab, setActiveTab] = useState('overview')
+  const [dateRange, setDateRange] = useState('today')
   const { t } = useLanguage()
   const navigate = useNavigate()
-
-  const [userForm, setUserForm] = useState({
-    name: '', email: '', password: '', role: 'waiter', phone: ''
-  })
-
-  const [menuForm, setMenuForm] = useState({
-    category_id: '', name: '', description: '', price: '', is_available: true
-  })
-
-  const [inventoryForm, setInventoryForm] = useState({
-    item_name: '', quantity: '', unit: '', cost_per_unit: '', minimum_stock: ''
-  })
 
   useEffect(() => {
     const userData = JSON.parse(localStorage.getItem('user'))
@@ -43,148 +29,30 @@ function ManagerDashboard() {
     
     api.defaults.headers.common['Authorization'] = `Bearer ${token}`
     setUser(userData)
-    fetchStats()
-    fetchUsers()
-    fetchMenuItems()
-    fetchCategories()
-    fetchInventory()
+    fetchAllData()
   }, [navigate])
 
-  const fetchStats = async () => {
+  const fetchAllData = async () => {
     try {
-      const [ordersRes, tablesRes, menuRes] = await Promise.all([
+      const [ordersRes, paymentsRes, usersRes, menuRes, tablesRes, roomsRes, bookingsRes] = await Promise.all([
         api.get('/orders'),
+        api.get('/payments'),
+        api.get('/users'),
+        api.get('/menu-items'),
         api.get('/tables'),
-        api.get('/menu-items')
+        api.get('/rooms'),
+        api.get('/room-bookings')
       ])
       
-      setStats({
-        orders: ordersRes.data.length,
-        tables: tablesRes.data.length,
-        menuItems: menuRes.data.length
-      })
+      setOrders(ordersRes.data)
+      setPayments(paymentsRes.data)
+      setUsers(usersRes.data)
+      setMenuItems(menuRes.data)
+      setTables(tablesRes.data)
+      setRooms(roomsRes.data)
+      setBookings(bookingsRes.data)
     } catch (error) {
-      console.error('Error fetching stats:', error)
-    }
-  }
-
-  const fetchUsers = async () => {
-    try {
-      const response = await api.get('/users')
-      setUsers(response.data)
-    } catch (error) {
-      console.error('Error fetching users:', error)
-    }
-  }
-
-  const fetchMenuItems = async () => {
-    try {
-      const response = await api.get('/menu-items')
-      setMenuItems(response.data)
-    } catch (error) {
-      console.error('Error fetching menu items:', error)
-    }
-  }
-
-  const fetchCategories = async () => {
-    try {
-      const response = await api.get('/categories')
-      setCategories(response.data)
-    } catch (error) {
-      console.error('Error fetching categories:', error)
-    }
-  }
-
-  const fetchInventory = async () => {
-    try {
-      const response = await api.get('/inventory')
-      setInventory(response.data)
-    } catch (error) {
-      console.error('Error fetching inventory:', error)
-    }
-  }
-
-  const handleAddUser = async (e) => {
-    e.preventDefault()
-    try {
-      if (editingItem) {
-        await api.put(`/users/${editingItem.id}`, userForm)
-      } else {
-        await api.post('/users', userForm)
-      }
-      fetchUsers()
-      setShowUserForm(false)
-      setEditingItem(null)
-      setUserForm({ name: '', email: '', password: '', role: 'waiter', phone: '' })
-    } catch (error) {
-      alert('Error: ' + (error.response?.data?.message || 'Failed to save user'))
-    }
-  }
-
-  const handleDeleteUser = async (id) => {
-    if (confirm('Are you sure you want to delete this user?')) {
-      try {
-        await api.delete(`/users/${id}`)
-        fetchUsers()
-      } catch (error) {
-        alert('Error deleting user')
-      }
-    }
-  }
-
-  const handleAddMenuItem = async (e) => {
-    e.preventDefault()
-    try {
-      if (editingItem) {
-        await api.put(`/menu-items/${editingItem.id}`, menuForm)
-      } else {
-        await api.post('/menu-items', menuForm)
-      }
-      fetchMenuItems()
-      setShowMenuForm(false)
-      setEditingItem(null)
-      setMenuForm({ category_id: '', name: '', description: '', price: '', is_available: true })
-    } catch (error) {
-      alert('Error: ' + (error.response?.data?.message || 'Failed to save menu item'))
-    }
-  }
-
-  const handleDeleteMenuItem = async (id) => {
-    if (confirm('Are you sure you want to delete this menu item?')) {
-      try {
-        await api.delete(`/menu-items/${id}`)
-        fetchMenuItems()
-      } catch (error) {
-        alert('Error deleting menu item')
-      }
-    }
-  }
-
-  const handleAddInventory = async (e) => {
-    e.preventDefault()
-    try {
-      if (editingItem) {
-        await api.put(`/inventory/${editingItem.id}`, inventoryForm)
-      } else {
-        await api.post('/inventory', inventoryForm)
-      }
-      fetchInventory()
-      setShowInventoryForm(false)
-      setEditingItem(null)
-      setInventoryForm({ item_name: '', quantity: '', unit: '', cost_per_unit: '', minimum_stock: '' })
-    } catch (error) {
-      alert('Error: ' + (error.response?.data?.message || 'Failed to save inventory'))
-    }
-  }
-
-  const handleDeleteInventory = async (id) => {
-    if (confirm('Are you sure you want to delete this inventory item?')) {
-      try {
-        await api.delete(`/inventory/${id}`)
-        fetchInventory()
-      } catch (error) {
-        alert('Error deleting inventory')
-      }
+      console.error('Error fetching data:', error)
     }
   }
 
@@ -194,12 +62,110 @@ function ManagerDashboard() {
     navigate('/login')
   }
 
+  // Analytics Functions
+  const getFilteredData = () => {
+    const now = new Date()
+    let startDate
+
+    switch(dateRange) {
+      case 'today':
+        startDate = new Date(now.setHours(0, 0, 0, 0))
+        break
+      case 'week':
+        startDate = new Date(now.setDate(now.getDate() - 7))
+        break
+      case 'month':
+        startDate = new Date(now.setMonth(now.getMonth() - 1))
+        break
+      default:
+        startDate = new Date(0)
+    }
+
+    return {
+      orders: orders.filter(o => new Date(o.created_at) >= startDate),
+      payments: payments.filter(p => new Date(p.created_at) >= startDate),
+      bookings: bookings.filter(b => new Date(b.created_at) >= startDate)
+    }
+  }
+
+  const calculateRevenue = () => {
+    const filtered = getFilteredData()
+    const orderRevenue = filtered.payments
+      .filter(p => p.status === 'completed')
+      .reduce((sum, p) => sum + parseFloat(p.total || p.amount || 0), 0)
+    
+    const bookingRevenue = filtered.bookings
+      .filter(b => b.status === 'confirmed' || b.status === 'checked_in')
+      .reduce((sum, b) => sum + parseFloat(b.total_price || 0), 0)
+    
+    return {
+      total: orderRevenue + bookingRevenue,
+      orders: orderRevenue,
+      bookings: bookingRevenue
+    }
+  }
+
+  const getTopSellingItems = () => {
+    const filtered = getFilteredData()
+    const itemCounts = {}
+    
+    filtered.orders.forEach(order => {
+      (order.order_items || []).forEach(item => {
+        const itemName = item.menu_item?.name || 'Unknown'
+        if (!itemCounts[itemName]) {
+          itemCounts[itemName] = { name: itemName, count: 0, revenue: 0 }
+        }
+        itemCounts[itemName].count += item.quantity
+        itemCounts[itemName].revenue += parseFloat(item.price) * item.quantity
+      })
+    })
+    
+    return Object.values(itemCounts)
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 5)
+  }
+
+  const getStaffPerformance = () => {
+    const filtered = getFilteredData()
+    const staffStats = {}
+    
+    users.forEach(u => {
+      staffStats[u.id] = {
+        name: u.name,
+        role: u.role,
+        orders: 0,
+        payments: 0,
+        revenue: 0
+      }
+    })
+    
+    filtered.orders.forEach(order => {
+      if (order.waiter_id && staffStats[order.waiter_id]) {
+        staffStats[order.waiter_id].orders++
+      }
+    })
+    
+    filtered.payments.forEach(payment => {
+      if (payment.cashier_id && staffStats[payment.cashier_id]) {
+        staffStats[payment.cashier_id].payments++
+        staffStats[payment.cashier_id].revenue += parseFloat(payment.total || payment.amount || 0)
+      }
+    })
+    
+    return Object.values(staffStats).filter(s => s.orders > 0 || s.payments > 0)
+  }
+
+  const revenue = calculateRevenue()
+  const filtered = getFilteredData()
+  const topItems = getTopSellingItems()
+  const staffPerformance = getStaffPerformance()
+
   if (!user) return <div className="loading">Loading...</div>
 
   return (
     <div className="dashboard">
       <div className="dashboard-header">
-        <h1>👨‍💼 {t('manager')} Dashboard</h1>
+        <h1>📊 Manager Dashboard</h1>
         <div className="user-info">
           <span>{t('welcome')}, {user.name}</span>
           <button onClick={handleLogout} className="logout-btn">{t('logout')}</button>
@@ -208,208 +174,367 @@ function ManagerDashboard() {
 
       <div className="tabs">
         <button className={activeTab === 'overview' ? 'active' : ''} onClick={() => setActiveTab('overview')}>Overview</button>
-        <button className={activeTab === 'users' ? 'active' : ''} onClick={() => setActiveTab('users')}>Staff Management</button>
-        <button className={activeTab === 'menu' ? 'active' : ''} onClick={() => setActiveTab('menu')}>Menu Management</button>
+        <button className={activeTab === 'reports' ? 'active' : ''} onClick={() => setActiveTab('reports')}>Reports</button>
+        <button className={activeTab === 'staff' ? 'active' : ''} onClick={() => setActiveTab('staff')}>Staff</button>
         <button className={activeTab === 'inventory' ? 'active' : ''} onClick={() => setActiveTab('inventory')}>Inventory</button>
+        <button className={activeTab === 'rooms' ? 'active' : ''} onClick={() => setActiveTab('rooms')}>Rooms</button>
+      </div>
+
+      <div style={{ marginBottom: '20px' }}>
+        <label style={{ marginRight: '10px', fontWeight: 'bold' }}>Date Range:</label>
+        <select value={dateRange} onChange={(e) => setDateRange(e.target.value)} style={{ padding: '8px', borderRadius: '5px' }}>
+          <option value="today">Today</option>
+          <option value="week">Last 7 Days</option>
+          <option value="month">Last 30 Days</option>
+          <option value="all">All Time</option>
+        </select>
       </div>
 
       {activeTab === 'overview' && (
         <>
           <div className="stats-grid">
-            <div className="stat-card">
-              <h3>{t('totalOrders')}</h3>
-              <p className="stat-number">{stats.orders}</p>
+            <div className="stat-card" style={{ backgroundColor: '#4caf50', color: 'white' }}>
+              <h3>Total Revenue</h3>
+              <p className="stat-number">${revenue.total.toFixed(2)}</p>
+              <p style={{ fontSize: '0.85em', marginTop: '5px' }}>
+                Orders: ${revenue.orders.toFixed(2)} | Rooms: ${revenue.bookings.toFixed(2)}
+              </p>
             </div>
             <div className="stat-card">
-              <h3>{t('totalTables')}</h3>
-              <p className="stat-number">{stats.tables}</p>
+              <h3>Total Orders</h3>
+              <p className="stat-number">{filtered.orders.length}</p>
+              <p style={{ fontSize: '0.85em', marginTop: '5px' }}>
+                Completed: {filtered.orders.filter(o => o.status === 'completed').length}
+              </p>
             </div>
             <div className="stat-card">
-              <h3>{t('menuItems')}</h3>
-              <p className="stat-number">{stats.menuItems}</p>
+              <h3>Room Bookings</h3>
+              <p className="stat-number">{filtered.bookings.length}</p>
+              <p style={{ fontSize: '0.85em', marginTop: '5px' }}>
+                Active: {bookings.filter(b => b.status === 'checked_in').length}
+              </p>
+            </div>
+            <div className="stat-card">
+              <h3>Staff Members</h3>
+              <p className="stat-number">{users.length}</p>
+              <p style={{ fontSize: '0.85em', marginTop: '5px' }}>
+                Active: {users.filter(u => u.role !== 'customer').length}
+              </p>
+            </div>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginTop: '20px' }}>
+            <div className="management-section">
+              <h2>📈 Top Selling Items</h2>
+              {topItems.length === 0 ? (
+                <p>No data available</p>
+              ) : (
+                <table className="data-table" style={{ color: '#000' }}>
+                  <thead>
+                    <tr>
+                      <th style={{ color: '#000' }}>Item</th>
+                      <th style={{ color: '#000' }}>Sold</th>
+                      <th style={{ color: '#000' }}>Revenue</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {topItems.map((item, index) => (
+                      <tr key={index}>
+                        <td style={{ color: '#000' }}>{item.name}</td>
+                        <td style={{ color: '#000' }}>{item.count}</td>
+                        <td style={{ color: '#000' }}>${item.revenue.toFixed(2)}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
+            </div>
+
+            <div className="management-section">
+              <h2>🏪 Current Status</h2>
+              <div style={{ padding: '15px' }}>
+                <div style={{ marginBottom: '15px' }}>
+                  <h4>Tables</h4>
+                  <p>Available: {tables.filter(t => t.status === 'available').length} / {tables.length}</p>
+                  <p>Occupied: {tables.filter(t => t.status === 'occupied').length}</p>
+                </div>
+                <div style={{ marginBottom: '15px' }}>
+                  <h4>Rooms</h4>
+                  <p>Available: {rooms.filter(r => r.status === 'available').length} / {rooms.length}</p>
+                  <p>Occupied: {rooms.filter(r => r.status === 'occupied').length}</p>
+                </div>
+                <div>
+                  <h4>Active Orders</h4>
+                  <p>Pending: {orders.filter(o => o.status === 'pending').length}</p>
+                  <p>Preparing: {orders.filter(o => o.status === 'preparing').length}</p>
+                  <p>Ready: {orders.filter(o => o.status === 'ready').length}</p>
+                </div>
+              </div>
             </div>
           </div>
         </>
       )}
 
-      {activeTab === 'users' && (
+      {activeTab === 'reports' && (
         <div className="management-section">
-          <div className="section-header">
-            <h2>Staff Management</h2>
-            <button onClick={() => { setShowUserForm(true); setEditingItem(null); }} className="add-btn">+ Add Staff</button>
+          <h2>📊 Detailed Reports</h2>
+          
+          <div style={{ marginBottom: '30px' }}>
+            <h3>Revenue Breakdown</h3>
+            <table className="data-table" style={{ color: '#000' }}>
+              <thead>
+                <tr>
+                  <th style={{ color: '#000' }}>Category</th>
+                  <th style={{ color: '#000' }}>Count</th>
+                  <th style={{ color: '#000' }}>Amount</th>
+                  <th style={{ color: '#000' }}>Percentage</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style={{ color: '#000' }}>Food Orders</td>
+                  <td style={{ color: '#000' }}>{filtered.payments.length}</td>
+                  <td style={{ color: '#000' }}>${revenue.orders.toFixed(2)}</td>
+                  <td style={{ color: '#000' }}>{revenue.total > 0 ? ((revenue.orders / revenue.total) * 100).toFixed(1) : 0}%</td>
+                </tr>
+                <tr>
+                  <td style={{ color: '#000' }}>Room Bookings</td>
+                  <td style={{ color: '#000' }}>{filtered.bookings.length}</td>
+                  <td style={{ color: '#000' }}>${revenue.bookings.toFixed(2)}</td>
+                  <td style={{ color: '#000' }}>{revenue.total > 0 ? ((revenue.bookings / revenue.total) * 100).toFixed(1) : 0}%</td>
+                </tr>
+                <tr style={{ fontWeight: 'bold', backgroundColor: '#f0f0f0' }}>
+                  <td style={{ color: '#000' }}>TOTAL</td>
+                  <td style={{ color: '#000' }}>{filtered.payments.length + filtered.bookings.length}</td>
+                  <td style={{ color: '#000' }}>${revenue.total.toFixed(2)}</td>
+                  <td style={{ color: '#000' }}>100%</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
 
-          {showUserForm && (
-            <div className="modal">
-              <div className="modal-content">
-                <h3>{editingItem ? 'Edit Staff' : 'Add New Staff'}</h3>
-                <form onSubmit={handleAddUser}>
-                  <input type="text" placeholder="Name" value={userForm.name} onChange={(e) => setUserForm({...userForm, name: e.target.value})} required />
-                  <input type="email" placeholder="Email" value={userForm.email} onChange={(e) => setUserForm({...userForm, email: e.target.value})} required />
-                  <input type="password" placeholder="Password" value={userForm.password} onChange={(e) => setUserForm({...userForm, password: e.target.value})} required={!editingItem} />
-                  <input type="text" placeholder="Phone" value={userForm.phone} onChange={(e) => setUserForm({...userForm, phone: e.target.value})} />
-                  <select value={userForm.role} onChange={(e) => setUserForm({...userForm, role: e.target.value})}>
-                    <option value="cashier">Cashier</option>
-                    <option value="chef">Chef</option>
-                    <option value="waiter">Waiter</option>
-                  </select>
-                  <div className="modal-actions">
-                    <button type="submit" className="save-btn">Save</button>
-                    <button type="button" onClick={() => { setShowUserForm(false); setEditingItem(null); }} className="cancel-btn">Cancel</button>
-                  </div>
-                </form>
-              </div>
-            </div>
-          )}
-
-          <table className="data-table">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Role</th>
-                <th>Phone</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {users.map(u => (
-                <tr key={u.id}>
-                  <td>{u.name}</td>
-                  <td>{u.email}</td>
-                  <td><span className={`role-badge ${u.role}`}>{u.role}</span></td>
-                  <td>{u.phone}</td>
-                  <td>
-                    <button onClick={() => { setEditingItem(u); setUserForm(u); setShowUserForm(true); }} className="edit-btn">Edit</button>
-                    <button onClick={() => handleDeleteUser(u.id)} className="delete-btn">Delete</button>
-                  </td>
+          <div style={{ marginBottom: '30px' }}>
+            <h3>Payment Methods</h3>
+            <table className="data-table" style={{ color: '#000' }}>
+              <thead>
+                <tr>
+                  <th style={{ color: '#000' }}>Method</th>
+                  <th style={{ color: '#000' }}>Transactions</th>
+                  <th style={{ color: '#000' }}>Amount</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {['cash', 'card', 'mobile'].map(method => {
+                  const methodPayments = filtered.payments.filter(p => p.payment_method === method)
+                  const amount = methodPayments.reduce((sum, p) => sum + parseFloat(p.total || p.amount || 0), 0)
+                  return (
+                    <tr key={method}>
+                      <td style={{ textTransform: 'capitalize', color: '#000' }}>{method}</td>
+                      <td style={{ color: '#000' }}>{methodPayments.length}</td>
+                      <td style={{ color: '#000' }}>${amount.toFixed(2)}</td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
+          </div>
+
+          <div>
+            <h3>Order Status Distribution</h3>
+            <table className="data-table" style={{ color: '#000' }}>
+              <thead>
+                <tr>
+                  <th style={{ color: '#000' }}>Status</th>
+                  <th style={{ color: '#000' }}>Count</th>
+                  <th style={{ color: '#000' }}>Percentage</th>
+                </tr>
+              </thead>
+              <tbody>
+                {['pending', 'confirmed', 'preparing', 'ready', 'served', 'completed', 'cancelled'].map(status => {
+                  const count = filtered.orders.filter(o => o.status === status).length
+                  return (
+                    <tr key={status}>
+                      <td style={{ textTransform: 'capitalize', color: '#000' }}>{status}</td>
+                      <td style={{ color: '#000' }}>{count}</td>
+                      <td style={{ color: '#000' }}>{filtered.orders.length > 0 ? ((count / filtered.orders.length) * 100).toFixed(1) : 0}%</td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
 
-      {activeTab === 'menu' && (
+      {activeTab === 'staff' && (
         <div className="management-section">
-          <div className="section-header">
-            <h2>Menu Management</h2>
-            <button onClick={() => { setShowMenuForm(true); setEditingItem(null); }} className="add-btn">+ Add Menu Item</button>
+          <h2>👥 Staff Management & Performance</h2>
+          
+          <div style={{ marginBottom: '30px' }}>
+            <h3>Staff Performance ({dateRange})</h3>
+            {staffPerformance.length === 0 ? (
+              <p>No performance data available</p>
+            ) : (
+              <table className="data-table" style={{ color: '#000' }}>
+                <thead>
+                  <tr>
+                    <th style={{ color: '#000' }}>Name</th>
+                    <th style={{ color: '#000' }}>Role</th>
+                    <th style={{ color: '#000' }}>Orders Handled</th>
+                    <th style={{ color: '#000' }}>Payments Processed</th>
+                    <th style={{ color: '#000' }}>Revenue Generated</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {staffPerformance.map((staff, index) => (
+                    <tr key={index}>
+                      <td style={{ color: '#000' }}>{staff.name}</td>
+                      <td style={{ textTransform: 'capitalize', color: '#000' }}>{staff.role}</td>
+                      <td style={{ color: '#000' }}>{staff.orders}</td>
+                      <td style={{ color: '#000' }}>{staff.payments}</td>
+                      <td style={{ color: '#000' }}>${staff.revenue.toFixed(2)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
           </div>
 
-          {showMenuForm && (
-            <div className="modal">
-              <div className="modal-content">
-                <h3>{editingItem ? 'Edit Menu Item' : 'Add New Menu Item'}</h3>
-                <form onSubmit={handleAddMenuItem}>
-                  <select value={menuForm.category_id} onChange={(e) => setMenuForm({...menuForm, category_id: e.target.value})} required>
-                    <option value="">Select Category</option>
-                    {categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
-                  </select>
-                  <input type="text" placeholder="Name" value={menuForm.name} onChange={(e) => setMenuForm({...menuForm, name: e.target.value})} required />
-                  <textarea placeholder="Description" value={menuForm.description} onChange={(e) => setMenuForm({...menuForm, description: e.target.value})} />
-                  <input type="number" step="0.01" placeholder="Price" value={menuForm.price} onChange={(e) => setMenuForm({...menuForm, price: e.target.value})} required />
-                  <label>
-                    <input type="checkbox" checked={menuForm.is_available} onChange={(e) => setMenuForm({...menuForm, is_available: e.target.checked})} />
-                    Available
-                  </label>
-                  <div className="modal-actions">
-                    <button type="submit" className="save-btn">Save</button>
-                    <button type="button" onClick={() => { setShowMenuForm(false); setEditingItem(null); }} className="cancel-btn">Cancel</button>
-                  </div>
-                </form>
-              </div>
-            </div>
-          )}
-
-          <table className="data-table">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Category</th>
-                <th>Price</th>
-                <th>Status</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {menuItems.map(item => (
-                <tr key={item.id}>
-                  <td>{item.name}</td>
-                  <td>{item.category?.name}</td>
-                  <td>${parseFloat(item.price).toFixed(2)}</td>
-                  <td><span className={`status-badge ${item.is_available ? 'available' : 'unavailable'}`}>{item.is_available ? 'Available' : 'Unavailable'}</span></td>
-                  <td>
-                    <button onClick={() => { setEditingItem(item); setMenuForm(item); setShowMenuForm(true); }} className="edit-btn">Edit</button>
-                    <button onClick={() => handleDeleteMenuItem(item.id)} className="delete-btn">Delete</button>
-                  </td>
+          <div>
+            <h3>All Staff Members</h3>
+            <table className="data-table" style={{ color: '#000' }}>
+              <thead>
+                <tr>
+                  <th style={{ color: '#000' }}>Name</th>
+                  <th style={{ color: '#000' }}>Role</th>
+                  <th style={{ color: '#000' }}>Phone</th>
+                  <th style={{ color: '#000' }}>Email/Username</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {users.map(u => (
+                  <tr key={u.id}>
+                    <td style={{ color: '#000' }}>{u.name}</td>
+                    <td style={{ textTransform: 'capitalize', color: '#000' }}>{u.role}</td>
+                    <td style={{ color: '#000' }}>{u.phone || 'N/A'}</td>
+                    <td style={{ color: '#000' }}>{u.email}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
 
       {activeTab === 'inventory' && (
         <div className="management-section">
-          <div className="section-header">
-            <h2>Inventory Management</h2>
-            <button onClick={() => { setShowInventoryForm(true); setEditingItem(null); }} className="add-btn">+ Add Item</button>
+          <h2>📦 Menu Items & Inventory</h2>
+          
+          <div style={{ marginBottom: '20px' }}>
+            <p><strong>Total Items:</strong> {menuItems.length}</p>
+            <p><strong>Available:</strong> {menuItems.filter(m => m.is_available).length}</p>
+            <p><strong>Unavailable:</strong> {menuItems.filter(m => !m.is_available).length}</p>
           </div>
 
-          {showInventoryForm && (
-            <div className="modal">
-              <div className="modal-content">
-                <h3>{editingItem ? 'Edit Inventory' : 'Add Inventory Item'}</h3>
-                <form onSubmit={handleAddInventory}>
-                  <input type="text" placeholder="Item Name" value={inventoryForm.item_name} onChange={(e) => setInventoryForm({...inventoryForm, item_name: e.target.value})} required />
-                  <input type="number" placeholder="Quantity" value={inventoryForm.quantity} onChange={(e) => setInventoryForm({...inventoryForm, quantity: e.target.value})} required />
-                  <input type="text" placeholder="Unit (kg, liters, pieces)" value={inventoryForm.unit} onChange={(e) => setInventoryForm({...inventoryForm, unit: e.target.value})} required />
-                  <input type="number" step="0.01" placeholder="Cost per Unit" value={inventoryForm.cost_per_unit} onChange={(e) => setInventoryForm({...inventoryForm, cost_per_unit: e.target.value})} required />
-                  <input type="number" placeholder="Minimum Stock" value={inventoryForm.minimum_stock} onChange={(e) => setInventoryForm({...inventoryForm, minimum_stock: e.target.value})} required />
-                  <div className="modal-actions">
-                    <button type="submit" className="save-btn">Save</button>
-                    <button type="button" onClick={() => { setShowInventoryForm(false); setEditingItem(null); }} className="cancel-btn">Cancel</button>
-                  </div>
-                </form>
-              </div>
-            </div>
-          )}
-
-          <table className="data-table">
+          <table className="data-table" style={{ color: '#000' }}>
             <thead>
               <tr>
-                <th>Item Name</th>
-                <th>Quantity</th>
-                <th>Unit</th>
-                <th>Cost/Unit</th>
-                <th>Min Stock</th>
-                <th>Status</th>
-                <th>Actions</th>
+                <th style={{ color: '#000' }}>Item Name</th>
+                <th style={{ color: '#000' }}>Category</th>
+                <th style={{ color: '#000' }}>Price</th>
+                <th style={{ color: '#000' }}>Status</th>
               </tr>
             </thead>
             <tbody>
-              {inventory.map(item => (
-                <tr key={item.id} className={item.quantity <= item.minimum_stock ? 'low-stock' : ''}>
-                  <td>{item.item_name}</td>
-                  <td>{item.quantity}</td>
-                  <td>{item.unit}</td>
-                  <td>${parseFloat(item.cost_per_unit).toFixed(2)}</td>
-                  <td>{item.minimum_stock}</td>
+              {menuItems.map(item => (
+                <tr key={item.id}>
+                  <td style={{ color: '#000' }}>{item.name}</td>
+                  <td style={{ color: '#000' }}>{item.category?.name || 'N/A'}</td>
+                  <td style={{ color: '#000' }}>${parseFloat(item.price).toFixed(2)}</td>
                   <td>
-                    {item.quantity <= item.minimum_stock ? 
-                      <span className="status-badge low">Low Stock</span> : 
-                      <span className="status-badge ok">OK</span>
-                    }
-                  </td>
-                  <td>
-                    <button onClick={() => { setEditingItem(item); setInventoryForm(item); setShowInventoryForm(true); }} className="edit-btn">Edit</button>
-                    <button onClick={() => handleDeleteInventory(item.id)} className="delete-btn">Delete</button>
+                    <span className={`status-badge ${item.is_available ? 'completed' : 'cancelled'}`}>
+                      {item.is_available ? 'Available' : 'Unavailable'}
+                    </span>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
+        </div>
+      )}
+
+      {activeTab === 'rooms' && (
+        <div className="management-section">
+          <h2>🏨 Room Management</h2>
+          
+          <div style={{ marginBottom: '20px' }}>
+            <h3>Room Status</h3>
+            <p><strong>Total Rooms:</strong> {rooms.length}</p>
+            <p><strong>Available:</strong> {rooms.filter(r => r.status === 'available').length}</p>
+            <p><strong>Occupied:</strong> {rooms.filter(r => r.status === 'occupied').length}</p>
+            <p><strong>Reserved:</strong> {rooms.filter(r => r.status === 'reserved').length}</p>
+          </div>
+
+          <table className="data-table" style={{ color: '#000' }}>
+            <thead>
+              <tr>
+                <th style={{ color: '#000' }}>Room Number</th>
+                <th style={{ color: '#000' }}>Type</th>
+                <th style={{ color: '#000' }}>Price/Night</th>
+                <th style={{ color: '#000' }}>Capacity</th>
+                <th style={{ color: '#000' }}>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {rooms.map(room => (
+                <tr key={room.id}>
+                  <td style={{ color: '#000' }}>{room.room_number}</td>
+                  <td style={{ textTransform: 'capitalize', color: '#000' }}>{room.room_type}</td>
+                  <td style={{ color: '#000' }}>${parseFloat(room.price_per_night).toFixed(2)}</td>
+                  <td style={{ color: '#000' }}>{room.capacity} guests</td>
+                  <td>
+                    <span className={`status-badge ${room.status}`}>
+                      {room.status}
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+
+          <div style={{ marginTop: '30px' }}>
+            <h3>Recent Bookings</h3>
+            <table className="data-table" style={{ color: '#000' }}>
+              <thead>
+                <tr>
+                  <th style={{ color: '#000' }}>Booking ID</th>
+                  <th style={{ color: '#000' }}>Room</th>
+                  <th style={{ color: '#000' }}>Guest Name</th>
+                  <th style={{ color: '#000' }}>Check-in</th>
+                  <th style={{ color: '#000' }}>Check-out</th>
+                  <th style={{ color: '#000' }}>Total Price</th>
+                  <th style={{ color: '#000' }}>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {bookings.slice(0, 10).map(booking => (
+                  <tr key={booking.id}>
+                    <td style={{ color: '#000' }}>#{booking.id}</td>
+                    <td style={{ color: '#000' }}>{booking.room?.room_number}</td>
+                    <td style={{ color: '#000' }}>{booking.guest_name}</td>
+                    <td style={{ color: '#000' }}>{new Date(booking.check_in_date).toLocaleDateString()}</td>
+                    <td style={{ color: '#000' }}>{new Date(booking.check_out_date).toLocaleDateString()}</td>
+                    <td style={{ color: '#000' }}>${parseFloat(booking.total_price).toFixed(2)}</td>
+                    <td>
+                      <span className={`status-badge ${booking.status}`}>
+                        {booking.status}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
     </div>

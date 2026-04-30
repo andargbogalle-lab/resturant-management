@@ -17,19 +17,33 @@ function Login() {
     setLoading(true)
 
     try {
-      console.log('Attempting login with:', email)
+      console.log('=== LOGIN ATTEMPT ===')
+      console.log('Username:', email)
+      console.log('Password length:', password.length)
+      console.log('API URL:', 'http://127.0.0.1:8000/api/login')
+      
       const response = await api.post('/login', { email, password })
-      console.log('Login response:', response.data)
+      
+      console.log('=== LOGIN SUCCESS ===')
+      console.log('Response:', response.data)
+      
       localStorage.setItem('token', response.data.token)
       localStorage.setItem('user', JSON.stringify(response.data.user))
       
       // Redirect based on role
       const role = response.data.user.role
+      console.log('Redirecting to:', `/dashboard/${role}`)
       navigate(`/dashboard/${role}`)
     } catch (err) {
-      console.error('Login error:', err)
+      console.error('=== LOGIN ERROR ===')
+      console.error('Error object:', err)
       console.error('Error response:', err.response)
-      setError(err.response?.data?.message || err.message || 'Login failed')
+      console.error('Error data:', err.response?.data)
+      console.error('Error status:', err.response?.status)
+      
+      const errorMessage = err.response?.data?.message || err.message || 'Login failed'
+      console.error('Displaying error:', errorMessage)
+      setError(errorMessage)
     } finally {
       setLoading(false)
     }
@@ -48,13 +62,13 @@ function Login() {
         
         <form onSubmit={handleLogin}>
           <div className="form-group">
-            <label>Email</label>
+            <label>Username</label>
             <input
-              type="email"
+              type="text"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              placeholder="Enter your email"
+              placeholder="Enter your username"
             />
           </div>
           
@@ -82,17 +96,6 @@ function Login() {
             {loading ? 'Logging in...' : 'Login'}
           </button>
         </form>
-
-        <div className="demo-accounts">
-          <h3>Demo Accounts (password: password)</h3>
-          <ul>
-            <li>Manager: manager@restaurant.com</li>
-            <li>Cashier: cashier@restaurant.com</li>
-            <li>Chef: chef@restaurant.com</li>
-            <li>Waiter: waiter@restaurant.com</li>
-            <li>Customer: customer@restaurant.com</li>
-          </ul>
-        </div>
       </div>
     </div>
   )

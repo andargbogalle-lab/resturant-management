@@ -80,7 +80,7 @@ function Home() {
           </div>
 
           {/* Hotel Feature */}
-          <div className="feature-card hotel-card">
+          <div className="feature-card hotel-card" onClick={() => navigate('/rooms')}>
             <div className="feature-image">
               <div className="image-placeholder hotel-bg">
                 <span className="feature-icon">🛏️</span>

@@ -12,6 +12,8 @@ use App\Http\Controllers\UserManagementController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\RoomController;
+use App\Http\Controllers\RoomBookingController;
 
 Route::get('/health', function () {
     return response()->json(['status' => 'ok', 'message' => 'Restaurant API is running']);
@@ -27,6 +29,17 @@ Route::get('/categories/{id}', [CategoryController::class, 'show']);
 Route::get('/menu-items', [MenuItemController::class, 'index']);
 Route::get('/menu-items/{id}', [MenuItemController::class, 'show']);
 Route::get('/tables', [TableController::class, 'index']);
+
+// Room routes (public - guests can view and book rooms)
+Route::get('/rooms', [RoomController::class, 'index']);
+Route::get('/rooms/{id}', [RoomController::class, 'show']);
+Route::post('/rooms/check-availability', [RoomController::class, 'checkAvailability']);
+Route::get('/rooms/available', [RoomController::class, 'availableRooms']);
+
+// Room booking routes (public - guests can book rooms)
+Route::post('/room-bookings', [RoomBookingController::class, 'store']);
+Route::get('/room-bookings', [RoomBookingController::class, 'index']);
+Route::get('/room-bookings/{id}', [RoomBookingController::class, 'show']);
 
 // Guest ordering (no authentication required)
 Route::post('/orders', [OrderController::class, 'store']);
@@ -91,5 +104,12 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::middleware(['role:waiter,manager'])->group(function () {
         Route::post('/tables', [TableController::class, 'store']);
         Route::put('/tables/{id}', [TableController::class, 'update']);
+    });
+    
+    // Room booking management (cashier and manager can manage bookings)
+    Route::middleware(['role:cashier,manager'])->group(function () {
+        Route::put('/room-bookings/{id}', [RoomBookingController::class, 'update']);
+        Route::post('/room-bookings/{id}/cancel', [RoomBookingController::class, 'cancel']);
+        Route::delete('/room-bookings/{id}', [RoomBookingController::class, 'destroy']);
     });
 });

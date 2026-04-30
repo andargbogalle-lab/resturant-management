@@ -58,18 +58,11 @@ return new class extends Migration
             $table->timestamp('completed_at')->nullable();
         });
 
-        // Add special instructions to orders
-        Schema::table('order_items', function (Blueprint $table) {
-            $table->enum('status', ['pending', 'preparing', 'ready', 'served'])->default('pending')->after('special_instructions');
-        });
+        // Note: status column already added in create_restaurants_tables migration
     }
 
     public function down(): void
     {
-        Schema::table('order_items', function (Blueprint $table) {
-            $table->dropColumn('status');
-        });
-        
         Schema::table('orders', function (Blueprint $table) {
             $table->dropForeign(['waiter_id']);
             $table->dropColumn(['waiter_id', 'completed_at']);

@@ -181,7 +181,11 @@ function WaiterDashboard() {
             </div>
             <div className="stat-card">
               <h3>Active Orders</h3>
-              <p className="stat-number">{orders.filter(o => ['pending', 'preparing'].includes(o.status)).length}</p>
+              <p className="stat-number">{orders.filter(o => ['pending', 'confirmed', 'preparing', 'ready'].includes(o.status)).length}</p>
+            </div>
+            <div className="stat-card">
+              <h3>Ready to Serve</h3>
+              <p className="stat-number">{orders.filter(o => o.status === 'ready').length}</p>
             </div>
           </div>
         </>
@@ -224,10 +228,10 @@ function WaiterDashboard() {
         <div className="management-section">
           <h2>Active Orders</h2>
           <div className="orders-list">
-            {orders.filter(o => ['pending', 'preparing', 'ready'].includes(o.status)).length === 0 ? (
+            {orders.filter(o => ['pending', 'confirmed', 'preparing', 'ready', 'served'].includes(o.status)).length === 0 ? (
               <p>No active orders</p>
             ) : (
-              orders.filter(o => ['pending', 'preparing', 'ready'].includes(o.status)).map(order => (
+              orders.filter(o => ['pending', 'confirmed', 'preparing', 'ready'].includes(o.status)).map(order => (
                 <div key={order.id} className="order-card">
                   <div className="order-header">
                     <h3>Order #{order.id}</h3>
@@ -235,11 +239,39 @@ function WaiterDashboard() {
                   </div>
                   <p><strong>Table:</strong> {order.table?.table_number}</p>
                   <p><strong>Total:</strong> ${parseFloat(order.total_amount).toFixed(2)}</p>
-                  <p><strong>Items:</strong> {order.items?.length || 0}</p>
+                  
+                  <div className="order-items-list">
+                    <p><strong>Items:</strong></p>
+                    {(order.order_items || []).map(item => (
+                      <div key={item.id} style={{ marginLeft: '10px', fontSize: '0.9em' }}>
+                        • {item.quantity}x {item.menu_item?.name || 'Unknown Item'}
+                      </div>
+                    ))}
+                  </div>
+                  
                   <p><strong>Time:</strong> {new Date(order.created_at).toLocaleTimeString()}</p>
                   
                   {order.status === 'ready' && (
-                    <button className="action-btn">✅ Serve Order</button>
+                    <button 
+                      onClick={async () => {
+                        try {
+                          await api.patch(`/orders/${order.id}/status`, { status: 'served' })
+                          alert('Order marked as served! Customer can now proceed to cashier for payment.')
+                          fetchData()
+                        } catch (error) {
+                          alert('Error updating order status')
+                        }
+                      }}
+                      className="action-btn success"
+                    >
+                      ✅ Mark as Served
+                    </button>
+                  )}
+                  
+                  {order.status === 'served' && (
+                    <div className="served-indicator" style={{ color: '#4caf50', fontWeight: 'bold', marginTop: '10px' }}>
+                      ✓ Served - Awaiting Payment
+                    </div>
                   )}
                 </div>
               ))
