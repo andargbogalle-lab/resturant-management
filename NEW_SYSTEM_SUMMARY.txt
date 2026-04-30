@@ -1,0 +1,186 @@
+╔══════════════════════════════════════════════════════════════╗
+║                                                              ║
+║         🇪🇹 BETESIDA RESTAURANT & HOTEL SYSTEM 🇪🇹            ║
+║              ቤተ ሳይዳ ሬስቶራንት እና ሆቴል                          ║
+║                                                              ║
+╚══════════════════════════════════════════════════════════════╝
+
+┌──────────────────────────────────────────────────────────────┐
+│                  ✅ SYSTEM UPDATED!                          │
+└──────────────────────────────────────────────────────────────┘
+
+🔑 NEW LOGIN CREDENTIALS (Only 3 Users)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  💰 CASHIER
+     Username: cashier
+     Password: 1234
+     Role: Payments, bookings, admin
+
+  👨‍🍳 CHIEF (Chef)
+     Username: chief
+     Password: 1234
+     Role: Kitchen management
+
+  🍽️ WAITER
+     Username: waiter
+     Password: 1234
+     Role: Tables, orders, service
+
+
+🛏️ NEW FEATURE: 10 BEDROOMS ADDED!
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Room Type    │ Quantity │ Price/Night │ Capacity
+  ─────────────┼──────────┼─────────────┼──────────
+  Single       │    3     │  500 Birr   │ 1 person
+  Double       │    4     │  800 Birr   │ 2 people
+  Suite        │    3     │ 1500 Birr   │ 4 people
+  ─────────────┴──────────┴─────────────┴──────────
+  TOTAL: 10 Bedrooms
+
+
+📋 ROOM LIST
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  R01 - Single  (500 Birr)  - Occupied
+  R02 - Single  (500 Birr)  - Occupied
+  R03 - Single  (500 Birr)  - Reserved
+  R04 - Double  (800 Birr)  - Reserved
+  R05 - Double  (800 Birr)  - Available ✅
+  R06 - Double  (800 Birr)  - Available ✅
+  R07 - Double  (800 Birr)  - Available ✅
+  R08 - Suite  (1500 Birr)  - Available ✅
+  R09 - Suite  (1500 Birr)  - Available ✅
+  R10 - Suite  (1500 Birr)  - Available ✅
+
+
+🚀 HOW TO APPLY UPDATES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  STEP 1: Start MySQL in XAMPP (GREEN status)
+  
+  STEP 2: Double-click: UPDATE_DATABASE.bat
+  
+  STEP 3: Wait for "completed successfully"
+  
+  STEP 4: Start servers:
+          - START_BACKEND.bat
+          - START_FRONTEND.bat
+  
+  STEP 5: Login at: http://localhost:3000/login
+          Username: cashier
+          Password: 1234
+
+
+✅ WHAT'S INCLUDED
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  RESTAURANT FEATURES:
+  ✓ 23 Ethiopian menu items
+  ✓ 10 dining tables
+  ✓ Guest ordering (no login)
+  ✓ Order management
+  ✓ Kitchen queue
+  ✓ Payment processing
+
+  HOTEL FEATURES (NEW!):
+  ✓ 10 bedrooms
+  ✓ Room booking system
+  ✓ Check-in/Check-out
+  ✓ Room status tracking
+  ✓ Guest management
+
+
+❌ REMOVED USERS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ✗ Manager   - Removed
+  ✗ Customer  - Removed
+  
+  Why? Simplified system with only essential staff
+
+
+🎯 WHO DOES WHAT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  CASHIER:
+  - Process payments
+  - Handle refunds
+  - Manage room bookings
+  - Check-in/Check-out guests
+  - Daily reports
+
+  CHIEF (Chef):
+  - View kitchen orders
+  - Update order status
+  - Mark items ready
+  - Kitchen management
+
+  WAITER:
+  - Manage tables
+  - Take orders
+  - Serve customers
+  - Show rooms to guests
+  - Assist with bookings
+
+
+🧪 TEST IT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  1. Login as Cashier:
+     Username: cashier
+     Password: 1234
+     ✅ See: Cashier Dashboard
+
+  2. Login as Chief:
+     Username: chief
+     Password: 1234
+     ✅ See: Chef Dashboard
+
+  3. Login as Waiter:
+     Username: waiter
+     Password: 1234
+     ✅ See: Waiter Dashboard
+
+
+⚠️ IMPORTANT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  • MySQL MUST be running (GREEN in XAMPP)
+  • UPDATE_DATABASE.bat will delete old data
+  • Creates fresh database with new structure
+  • Username is "chief" not "chef"
+  • All passwords are: 1234
+
+
+📊 SYSTEM STATS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Users:          3 (cashier, chief, waiter)
+  Menu Items:    23 (Ethiopian dishes)
+  Tables:        10 (dining tables)
+  Bedrooms:      10 (hotel rooms)
+  Categories:     4 (food categories)
+
+
+🎊 READY TO USE!
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Your system now includes:
+  ✅ Restaurant management
+  ✅ Hotel room management
+  ✅ Simple 3-user system
+  ✅ All passwords: 1234
+
+  Just run UPDATE_DATABASE.bat and start using!
+
+
+╔══════════════════════════════════════════════════════════════╗
+║                                                              ║
+║              ቤተ ሳይዳ ሬስቶራንት እና ሆቴል                          ║
+║            Betesida Restaurant & Hotel                       ║
+║                                                              ║
+║         Restaurant + Hotel Management System                 ║
+║                                                              ║
+╚══════════════════════════════════════════════════════════════╝

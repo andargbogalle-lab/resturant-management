@@ -1,0 +1,126 @@
+╔══════════════════════════════════════════════════════════════╗
+║                                                              ║
+║              🇪🇹 BETESIDA RESTAURANT SYSTEM 🇪🇹               ║
+║                   ቤተ ሳይዳ ሬስቶራንት                            ║
+║                                                              ║
+╚══════════════════════════════════════════════════════════════╝
+
+┌──────────────────────────────────────────────────────────────┐
+│                     LOGIN CREDENTIALS                        │
+└──────────────────────────────────────────────────────────────┘
+
+  👔 MANAGER
+     Username: manager
+     Password: 1234
+     Access: Full system control
+
+  💰 CASHIER
+     Username: cashier
+     Password: 1234
+     Access: Payments & reports
+
+  👨‍🍳 CHEF
+     Username: chef
+     Password: 1234
+     Access: Kitchen orders
+
+  🍽️ WAITER
+     Username: waiter
+     Password: 1234
+     Access: Tables & orders
+
+  🛍️ CUSTOMER
+     Username: customer
+     Password: 1234
+     Access: Menu & ordering
+
+┌──────────────────────────────────────────────────────────────┐
+│                      QUICK START                             │
+└──────────────────────────────────────────────────────────────┘
+
+  1. Start MySQL in XAMPP (GREEN status)
+  2. Run: UPDATE_DATABASE.bat
+  3. Run: START_BACKEND.bat
+  4. Run: START_FRONTEND.bat
+  5. Open: http://localhost:3000/login
+  6. Login with any user above
+
+┌──────────────────────────────────────────────────────────────┐
+│                      REMEMBER                                │
+└──────────────────────────────────────────────────────────────┘
+
+  ✓ All usernames are lowercase
+  ✓ All passwords are: 1234
+  ✓ No @ symbol in username
+  ✓ Simple and easy!
+
+┌──────────────────────────────────────────────────────────────┐
+│                      GUEST ORDERING                          │
+└──────────────────────────────────────────────────────────────┘
+
+  Guests don't need to login!
+  
+  1. Go to: http://localhost:3000
+  2. Click "Menu"
+  3. Add items to cart
+  4. Enter table number (1-10)
+  5. Place order
+  
+  No username or password needed! ✅
+
+╔══════════════════════════════════════════════════════════════╗
+║                                                              ║
+║                    SYSTEM INFORMATION                        ║
+║                                                              ║
+║  Frontend: http://localhost:3000                            ║
+║  Backend:  http://127.0.0.1:8000                            ║
+║  Login:    http://localhost:3000/login                      ║
+║                                                              ║
+║  Database: restaurant_system                                ║
+║  MySQL Port: 3306                                           ║
+║                                                              ║
+╚══════════════════════════════════════════════════════════════╝
+
+┌──────────────────────────────────────────────────────────────┐
+│                   TROUBLESHOOTING                            │
+└──────────────────────────────────────────────────────────────┘
+
+  Problem: Can't login
+  Solution: 
+    1. Run UPDATE_DATABASE.bat first
+    2. Make sure MySQL is running (GREEN)
+    3. Use lowercase username
+    4. Password is: 1234
+
+  Problem: System not responding
+  Solution:
+    1. Check MySQL is GREEN in XAMPP
+    2. Restart backend server
+    3. Clear browser cache (Ctrl+Shift+R)
+
+┌──────────────────────────────────────────────────────────────┐
+│                   EXAMPLE LOGIN                              │
+└──────────────────────────────────────────────────────────────┘
+
+  Step 1: Open http://localhost:3000/login
+  
+  Step 2: Enter credentials
+          ┌─────────────────────────┐
+          │ Username: manager       │
+          │ Password: 1234          │
+          │                         │
+          │      [  Login  ]        │
+          └─────────────────────────┘
+  
+  Step 3: See Manager Dashboard ✅
+
+╔══════════════════════════════════════════════════════════════╗
+║                                                              ║
+║                  🎉 READY TO USE! 🎉                         ║
+║                                                              ║
+║         All credentials are simple and easy!                 ║
+║         Just run UPDATE_DATABASE.bat to apply!               ║
+║                                                              ║
+╚══════════════════════════════════════════════════════════════╝
+
+Print this card and keep it handy! 📋

@@ -1,0 +1,54 @@
+========================================
+RESTAURANT SYSTEM - FINAL STEP
+========================================
+
+You said both backend and frontend can run now!
+
+If composer install is still running in background, that's fine.
+
+QUICK FIX (30 seconds):
+========================
+
+Right-click "enable-zip-quick.ps1" and select "Run with PowerShell"
+
+This will:
+1. Enable ZIP extension automatically
+2. Install all Laravel dependencies
+3. Generate security keys
+4. Run database migrations
+5. Done!
+
+OR MANUAL (if PowerShell doesn't work):
+========================================
+
+1. Open: C:\xampp_new\php\php.ini
+2. Press Ctrl+F and search for: extension=zip
+3. Remove the semicolon if you see: ;extension=zip
+4. Save the file
+
+Then run in terminal:
+cd backend
+C:\xampp_new\php\php.exe ..\composer.phar install
+C:\xampp_new\php\php.exe artisan key:generate
+C:\xampp_new\php\php.exe artisan migrate
+
+THEN START YOUR APP:
+====================
+
+Double-click: start-app.bat
+
+OR manually:
+
+Terminal 1:
+cd backend
+C:\xampp_new\php\php.exe artisan serve
+
+Terminal 2:
+cd frontend
+npm run dev
+
+OPEN: http://localhost:3000
+
+========================================
+That's it! Your restaurant system is ready!
+========================================

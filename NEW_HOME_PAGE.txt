@@ -1,0 +1,159 @@
+╔══════════════════════════════════════════════════════════════╗
+║                                                              ║
+║           ✅ HOME PAGE UPDATED WITH ADVERTISING!            ║
+║                                                              ║
+╚══════════════════════════════════════════════════════════════╝
+
+🎨 NEW HOME PAGE LAYOUT:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ┌────────────────────────────────────────────────┐
+  │         🏨 HERO SECTION                        │
+  │                                                │
+  │         [Logo with Animation]                  │
+  │    ቤተ ሳይዳ ሬስቶራንት እና ሆቴል                     │
+  │    Betesida Restaurant & Hotel                 │
+  │  🍽️ Ethiopian Cuisine | 🛏️ Accommodations     │
+  └────────────────────────────────────────────────┘
+
+  ┌────────────────────────────────────────────────┐
+  │      📢 ADVERTISING SECTION                    │
+  │                                                │
+  │  ┌──────────────┐    ┌──────────────┐        │
+  │  │ 🍽️ RESTAURANT│    │ 🛏️ HOTEL     │        │
+  │  │              │    │              │        │
+  │  │ • 23+ Dishes │    │ • 10 Rooms   │        │
+  │  │ • Fresh Food │    │ • 3 Types    │        │
+  │  │ • Vegetarian │    │ • Affordable │        │
+  │  │              │    │              │        │
+  │  │ [View Menu]  │    │ [Book Now]   │        │
+  │  └──────────────┘    └──────────────┘        │
+  └────────────────────────────────────────────────┘
+
+  ┌────────────────────────────────────────────────┐
+  │         🛏️ ROOM TYPES                          │
+  │                                                │
+  │  ┌──────┐  ┌──────┐  ┌──────┐                │
+  │  │Single│  │Double│  │Suite │                │
+  │  │      │  │⭐BEST│  │      │                │
+  │  │ 500  │  │ 800  │  │ 1500 │                │
+  │  │Birr  │  │Birr  │  │Birr  │                │
+  │  └──────┘  └──────┘  └──────┘                │
+  └────────────────────────────────────────────────┘
+
+  ┌────────────────────────────────────────────────┐
+  │         🎉 SPECIAL OFFERS                      │
+  │                                                │
+  │  • Dine & Stay Package (20% off)              │
+  │  • Free Coffee Ceremony                        │
+  │  • Weekend Special (3rd night 50% off)        │
+  └────────────────────────────────────────────────┘
+
+  ┌────────────────────────────────────────────────┐
+  │         📞 CONTACT INFORMATION                 │
+  │                                                │
+  │  📍 Addis Ababa, Ethiopia                     │
+  │  📞 +251 11 XXX XXXX                          │
+  │  ⏰ Open Daily: 7:00 AM - 11:00 PM            │
+  └────────────────────────────────────────────────┘
+
+
+✨ DESIGN FEATURES:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ✓ Beautiful gradient backgrounds
+  ✓ Animated logo (floating effect)
+  ✓ Hover effects on cards
+  ✓ Responsive design (mobile-friendly)
+  ✓ Professional color schemes
+  ✓ Clear call-to-action buttons
+  ✓ Icon animations (pulse effect)
+
+
+🛏️ ROOM INFORMATION DISPLAYED:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Single Room:
+  • 500 Birr/night
+  • 1 Person
+  • Comfortable bed, Private bathroom, WiFi
+
+  Double Room: ⭐ MOST POPULAR
+  • 800 Birr/night
+  • 2 People
+  • Queen bed, Private bathroom, TV & WiFi
+
+  Suite:
+  • 1500 Birr/night
+  • 4 People
+  • Spacious, Premium amenities, Best views
+
+
+🎯 HOW TO VIEW:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  1. Start servers:
+     - START_BACKEND.bat
+     - START_FRONTEND.bat
+
+  2. Open browser:
+     http://localhost:3000
+
+  3. Enjoy the new home page! ✨
+
+
+📱 RESPONSIVE:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ✓ Works on desktop
+  ✓ Works on tablet
+  ✓ Works on mobile
+  ✓ Adapts to all screen sizes
+
+
+🎨 COLORS USED:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Hero: Purple gradient
+  Restaurant: Pink/Red gradient
+  Hotel: Blue/Cyan gradient
+  Single Room: Teal/Pink
+  Double Room: Orange/Peach
+  Suite: Pink/Purple
+
+
+✅ WHAT'S INCLUDED:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ✓ Restaurant advertising
+  ✓ Hotel bedroom showcase
+  ✓ Room types with prices
+  ✓ Special promotional offers
+  ✓ Contact information
+  ✓ Beautiful animations
+  ✓ Professional design
+
+
+🎊 READY TO VIEW!
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Your home page now looks professional and attractive!
+
+  Open: http://localhost:3000
+
+  Features:
+  • Restaurant promotion
+  • Bedroom advertising
+  • Room prices
+  • Special offers
+  • Contact details
+
+  Perfect for attracting customers! 🇪🇹🍽️🛏️
+
+
+╔══════════════════════════════════════════════════════════════╗
+║                                                              ║
+║              ቤተ ሳይዳ ሬስቶራንት እና ሆቴል                          ║
+║            Betesida Restaurant & Hotel                       ║
+║                                                              ║
+╚══════════════════════════════════════════════════════════════╝
